@@ -1382,8 +1382,6 @@ export default function THAWARApp() {
                       onSympathy={(p)=>pushNotif(p.type==="thanks"?"post_thanks":"post_awareness","「"+p.text.slice(0,22)+"…」を読んで、"+(p.type==="thanks"?"感謝":"気づき")+"が生まれたユーザーがいます", p.id)}
                     />
               ))}
-                    />
-              ))}
             </div>
           )}
 
