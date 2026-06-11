@@ -407,7 +407,7 @@ function InputPopup({ type, onSave, onClose }) {
 }
 
 // ===== POST CARD =====
-function PostCard({ post, users, onAction, onSympathy }) {
+function PostCard({ post, users, onAction, onSympathy, highlight }) {
   const [sympathy,setSympathy]=useState(post.sympathy);
   const [reacted,setReacted]=useState(false);
   const [showAct,setShowAct]=useState(false);
@@ -419,8 +419,8 @@ function PostCard({ post, users, onAction, onSympathy }) {
   const iconWhite=isAw?ICON_AWARE_WHITE:ICON_THANKS_WHITE;
 
   return (
-    <div style={{background:C.white,borderRadius:22,padding:"16px 16px 14px",marginBottom:12,
-      boxShadow:("0 5px 0 "+color+"44, 0 2px 10px rgba(0,0,0,0.04)"),border:("2px solid "+color+"44")}}>
+    <div id={"post-"+post.id} style={{background:highlight?"#FFFDE7":C.white,borderRadius:22,padding:"16px 16px 14px",marginBottom:12,
+      boxShadow:highlight?("0 5px 0 "+color+", 0 0 0 3px "+color):("0 5px 0 "+color+"44, 0 2px 10px rgba(0,0,0,0.04)"),border:("2px solid "+(highlight?color:color+"44")),transition:"all 0.5s"}}>
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
         <div style={{width:40,height:40,borderRadius:"50%",
           background:("linear-gradient(135deg,"+color+","+colorDeep+")"),
@@ -489,7 +489,7 @@ function PostCard({ post, users, onAction, onSympathy }) {
 // ===== CHANGE REPORT MODAL =====
 function ChangeReportModal({ onSave, onClose }) {
   const [text, setText] = useState("");
-  const SP_REPORT = 3;
+  const SP_REPORT = 5;
   return (
     <div style={{position:"fixed",inset:0,zIndex:10001,background:"rgba(56,56,56,0.55)",
       backdropFilter:"blur(6px)",display:"flex",alignItems:"flex-end"}} onClick={onClose}>
@@ -526,7 +526,7 @@ function ChangeReportModal({ onSave, onClose }) {
           </span>
           <span style={{fontFamily:F,fontWeight:900,fontSize:"0.82rem",color:"#8B5CF6",
             background:"#8B5CF622",padding:"3px 10px",borderRadius:99}}>
-            ＋{SP_REPORT} SP
+            ボタン+5SP / 投稿+15SP
           </span>
         </div>
         <div style={{display:"flex",gap:10}}>
@@ -539,7 +539,7 @@ function ChangeReportModal({ onSave, onClose }) {
             color:text.trim()?"#fff":"#9E9E9E",
             fontFamily:F,fontWeight:900,fontSize:"0.95rem",cursor:text.trim()?"pointer":"default",
             boxShadow:text.trim()?"0 4px 0 #6D28D9":"none",transition:"all 0.2s"}}>
-            投稿する ＋{SP_REPORT}SP 🌱
+            投稿する ＋15SP 🌱
           </button>
         </div>
       </div>
@@ -548,7 +548,7 @@ function ChangeReportModal({ onSave, onClose }) {
 }
 
 // ===== CHANGE REPORT CARD (スレッド用) =====
-function ChangeReportCard({ post, users, onAction }) {
+function ChangeReportCard({ post, users, onAction, highlight }) {
   const [showAct, setShowAct] = useState(false);
   const [sympathy, setSympathy] = useState(post.sympathy||0);
   const [reacted, setReacted] = useState(false);
@@ -561,9 +561,9 @@ function ChangeReportCard({ post, users, onAction }) {
   const hasMore = post.text.length > preview.length + 5;
 
   return (
-    <div style={{background:"#FAF7FD",borderRadius:22,padding:"16px 16px 14px",marginBottom:12,
-      boxShadow:"0 5px 0 "+PURPLE+"44, 0 2px 10px rgba(0,0,0,0.04)",
-      border:"2px solid "+PURPLE+"44"}}>
+    <div id={"post-"+post.id} style={{background:highlight?"#F3E8FF":"#FAF7FD",borderRadius:22,padding:"16px 16px 14px",marginBottom:12,
+      boxShadow:highlight?("0 5px 0 "+PURPLE+", 0 0 0 3px "+PURPLE):("0 5px 0 "+PURPLE+"44, 0 2px 10px rgba(0,0,0,0.04)"),
+      border:"2px solid "+(highlight?PURPLE:PURPLE+"44"),transition:"all 0.5s"}}>
       {/* バッジ */}
       <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
         <div style={{width:40,height:40,borderRadius:"50%",
@@ -650,18 +650,137 @@ function OverlapInsight({ thanks, awareness }) {
 
 // ===== LOG LIST (マイページ内タブ付きリスト) =====
 const MOCK_LOGS = [
-  {id:1,type:"thanks", text:"朝、妻がお弁当を作ってくれた。",            time:"今日 08:12", hasText:true,  editing:false},
-  {id:2,type:"thanks", text:"",                                          time:"今日 10:34", hasText:false, editing:false},
-  {id:3,type:"awareness",text:"急がなくても物事は進むんだと気づいた。",   time:"今日 12:05", hasText:true,  editing:false},
-  {id:4,type:"thanks", text:"同僚が資料まとめを手伝ってくれた。",          time:"昨日 15:20", hasText:true,  editing:false},
-  {id:5,type:"awareness",text:"",                                         time:"昨日 19:44", hasText:false, editing:false},
-  {id:6,type:"thanks", text:"",                                           time:"2日前 07:55", hasText:false, editing:false},
-  {id:7,type:"thanks", text:"電車で席を譲ってもらった。",                  time:"2日前 09:10", hasText:true,  editing:false},
-  {id:8,type:"awareness",text:"比べるのをやめたら心が軽くなった。",        time:"3日前 21:30", hasText:true,  editing:false},
+  {id:1,type:"thanks",    text:"朝、妻がお弁当を作ってくれた。",           time:"今日 08:12",  hasText:true},
+  {id:2,type:"thanks",    text:"",                                         time:"今日 10:34",  hasText:false},
+  {id:3,type:"awareness", text:"急がなくても物事は進むんだと気づいた。",  time:"今日 12:05",  hasText:true},
+  {id:4,type:"thanks",    text:"同僚が資料まとめを手伝ってくれた。",       time:"昨日 15:20",  hasText:true},
+  {id:5,type:"awareness", text:"",                                         time:"昨日 19:44",  hasText:false},
+  {id:6,type:"thanks",    text:"",                                         time:"2日前 07:55", hasText:false},
+  {id:7,type:"thanks",    text:"電車で席を譲ってもらった。",               time:"2日前 09:10", hasText:true},
+  {id:8,type:"awareness", text:"比べるのをやめたら心が軽くなった。",       time:"3日前 21:30", hasText:true},
+  {id:9,type:"change_report", text:"感謝を始めて1ヶ月。朝の時間が少し豊かになった気がする。", time:"1週間前", hasText:true},
 ];
 
 function LogList() {
-  return (<div style={{background:"#fff",borderRadius:22,padding:"18px 16px",boxShadow:"0 5px 0 #DFD4C8",border:"2px solid #DFD4C8"}}><div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:"#383838",marginBottom:14}}>📖 わたしの記録</div><div style={{fontFamily:F,fontSize:"0.8rem",color:"#9E9E9E",textAlign:"center",padding:"24px 0"}}>記録はここに表示されます</div></div>);
+  const [activeTab, setActiveTab] = useState("all");
+  const [logs, setLogs] = useState(MOCK_LOGS);
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  const tabs = [
+    {key:"all",           label:"すべて",   color:C.text},
+    {key:"thanks",        label:"感謝",     color:C.thanks},
+    {key:"awareness",     label:"気づき",   color:C.awareness},
+    {key:"change_report", label:"変化",     color:"#8B5CF6"},
+  ];
+
+  const filtered = activeTab==="all" ? logs : logs.filter(l=>l.type===activeTab);
+
+  const typeConfig = {
+    thanks:        {color:C.thanks,        deep:C.thanksDeep,    icon:ICON_THANKS_WHITE, label:"感謝"},
+    awareness:     {color:C.awareness,     deep:C.awarenessDeep, icon:ICON_AWARE_WHITE,  label:"気づき"},
+    change_report: {color:"#8B5CF6",       deep:"#6D28D9",       emoji:"🌱",             label:"変化レポート"},
+  };
+
+  const startEdit = (log) => { setEditId(log.id); setEditText(log.text||""); };
+  const saveEdit  = (id)  => {
+    setLogs(ls=>ls.map(l=>l.id===id?{...l,text:editText,hasText:!!editText.trim()}:l));
+    setEditId(null);
+  };
+
+  return (
+    <div style={{background:C.white,borderRadius:22,padding:"18px 16px",
+      boxShadow:"0 5px 0 #DFD4C8",border:("2px solid "+C.sub2),marginBottom:16}}>
+
+      {/* タイトル */}
+      <div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:C.text,marginBottom:14}}>
+        📖 わたしの記録
+      </div>
+
+      {/* タブ */}
+      <div style={{display:"flex",gap:6,marginBottom:16,overflowX:"auto",paddingBottom:2}}>
+        {tabs.map(t=>(
+          <button key={t.key} onClick={()=>setActiveTab(t.key)} style={{
+            padding:"6px 14px",borderRadius:99,border:"none",cursor:"pointer",
+            background:activeTab===t.key?t.color:C.sub1,
+            color:activeTab===t.key?"#fff":C.gray,
+            fontFamily:F,fontWeight:800,fontSize:"0.72rem",whiteSpace:"nowrap",
+            boxShadow:activeTab===t.key?("0 3px 0 "+t.color+"88"):"none",
+            transition:"all 0.15s",
+          }}>{t.label}</button>
+        ))}
+      </div>
+
+      {/* ログ一覧 */}
+      {filtered.length===0
+        ? <div style={{textAlign:"center",padding:"24px 0",fontFamily:F,fontSize:"0.8rem",color:C.gray}}>
+            まだ記録がありません
+          </div>
+        : filtered.map(log=>{
+          const cfg = typeConfig[log.type]||typeConfig.thanks;
+          return (
+            <div key={log.id} style={{borderRadius:16,padding:"12px 14px",marginBottom:10,
+              background:cfg.color+"10",border:("1.5px solid "+cfg.color+"33")}}>
+              {/* ヘッダー */}
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
+                <div style={{width:24,height:24,borderRadius:"50%",background:cfg.color,
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  boxShadow:("0 2px 0 "+cfg.deep)}}>
+                  {cfg.icon
+                    ? <img src={cfg.icon} alt="" style={{width:14,height:14,objectFit:"contain"}}/>
+                    : <span style={{fontSize:"0.7rem"}}>{cfg.emoji}</span>}
+                </div>
+                <span style={{fontFamily:F,fontWeight:800,fontSize:"0.72rem",color:cfg.color}}>{cfg.label}</span>
+                <span style={{fontFamily:F,fontSize:"0.62rem",color:C.gray,marginLeft:"auto"}}>{log.time}</span>
+              </div>
+
+              {/* 本文 or 編集 */}
+              {editId===log.id ? (
+                <div>
+                  <textarea value={editText} onChange={e=>setEditText(e.target.value)}
+                    autoFocus
+                    style={{width:"100%",minHeight:70,border:("2px solid "+cfg.color),
+                      borderRadius:12,padding:"10px 12px",fontFamily:F,fontSize:"0.88rem",
+                      color:C.text,background:"#fff",outline:"none",resize:"none",
+                      boxSizing:"border-box",lineHeight:1.7}}/>
+                  <div style={{display:"flex",gap:8,marginTop:8}}>
+                    <button onClick={()=>setEditId(null)} style={{flex:1,padding:"8px",borderRadius:12,
+                      border:("2px solid "+C.sub2),background:"#fff",color:C.gray,
+                      fontFamily:F,fontWeight:800,fontSize:"0.8rem",cursor:"pointer"}}>キャンセル</button>
+                    <button onClick={()=>saveEdit(log.id)} style={{flex:2,padding:"8px",borderRadius:12,
+                      border:"none",background:editText.trim()?cfg.color:C.sub2,
+                      color:editText.trim()?"#fff":C.gray,
+                      fontFamily:F,fontWeight:900,fontSize:"0.8rem",cursor:"pointer",
+                      boxShadow:editText.trim()?("0 3px 0 "+cfg.deep):"none"}}>保存</button>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  {log.hasText
+                    ? <p style={{margin:0,fontFamily:F,fontSize:"0.88rem",color:C.text,
+                        fontWeight:500,lineHeight:1.7}}>{log.text}</p>
+                    : <button onClick={()=>startEdit(log)} style={{
+                        background:"none",border:("1.5px dashed "+cfg.color+"66"),
+                        borderRadius:10,padding:"6px 14px",cursor:"pointer",
+                        fontFamily:F,fontSize:"0.75rem",color:cfg.color,fontWeight:700}}>
+                        ＋ 内容を記入する
+                      </button>
+                  }
+                  {log.hasText && (
+                    <button onClick={()=>startEdit(log)} style={{
+                      background:"none",border:"none",cursor:"pointer",
+                      fontFamily:F,fontSize:"0.68rem",color:C.gray,
+                      marginTop:4,display:"block",fontWeight:600}}>✏️ 編集</button>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })
+      }
+
+    </div>
+  );
 }
 
 
@@ -747,7 +866,7 @@ function LevelCard({ sp, onOpenSettings, user }) {
   );
 }
 
-function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeReport, hasChangeReportNotif }) {
+function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeReport, hasChangeReportNotif, onLogout }) {
   const weekData=[12,8,15,22,11,30,18];
   const days=["月","火","水","木","金","土","日"];
   const maxVal=Math.max(...weekData);
@@ -862,6 +981,16 @@ function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeRepor
 
       {/* 記録リスト */}
       <LogList/>
+
+      {/* ログアウト */}
+      <div style={{background:C.white,borderRadius:22,padding:"16px",marginBottom:16,
+        boxShadow:"0 4px 0 #DFD4C8",border:("2px solid "+C.sub2)}}>
+        <button onClick={onLogout} style={{width:"100%",padding:"14px",borderRadius:16,
+          border:("2px solid "+C.sub2),background:"#fff",
+          color:C.gray,fontFamily:F,fontWeight:800,fontSize:"0.9rem",cursor:"pointer"}}>
+          ログアウト
+        </button>
+      </div>
     </div>
   );
 }
@@ -1050,6 +1179,7 @@ export default function THAWARApp() {
   const [popup,setPopup]=useState(null);
   const [showChangeReport,setShowChangeReport]=useState(false);
   const [threadPosts,setThreadPosts]=useState(mockPosts);
+  const [highlightPostId,setHighlightPostId]=useState(null);
   const idRef=useRef(0);
   const nextId=()=>++idRef.current;
 
@@ -1062,10 +1192,10 @@ export default function THAWARApp() {
   const handleRegister=(u)=>{setCurrentUser(u);setSP(0);setThanks(0);setAwareness(0);setScreen("app");};
   const handleLogout=()=>{setCurrentUser(null);setScreen("login");setAppTab("home");setShowSettings(false);};
 
-  const pushNotif=(type,message)=>{
+  const pushNotif=(type,message,postId=null)=>{
     const id=nextId();
     const times=["たった今","1分前","2分前"];
-    setNotifications(ns=>[{id:id,type:type,message:message,time:times[0],read:false},...ns]);
+    setNotifications(ns=>[{id:id,type:type,message:message,time:times[0],read:false,postId:postId},...ns]);
   };
 
   const readAll=()=>setNotifications(ns=>ns.map(n=>({...n,read:true})));
@@ -1080,14 +1210,33 @@ export default function THAWARApp() {
       period:"記録中",
     };
     setThreadPosts(ps=>[newPost,...ps]);
-    setSP(s=>s+spAmt);
-    pushNotif("change_report","変化レポートを投稿しました 🌱 ＋"+spAmt+"SP獲得！");
+    const postBonus = 15;
+    setSP(s=>s+postBonus);
+    showToast(postBonus, "#8B5CF6");
+    pushNotif("change_report","変化レポートを投稿 +15SP 🌱 (合計+20SP獲得！)");
     setShowChangeReport(false);
     setAppTab("thread");
   };
 
   const hasChangeReportNotif = notifications.some(n=>n.type==="change_report"&&!n.read);
-  const readOne=(id)=>setNotifications(ns=>ns.map(n=>n.id===id?{...n,read:true}:n));
+  const readOne=(id)=>{
+    setNotifications(ns=>ns.map(n=>{
+      if(n.id===id){
+        if(n.postId){
+          setAppTab("thread");
+          setHighlightPostId(n.postId);
+          setTimeout(()=>{
+            const el=document.getElementById("post-"+n.postId);
+            if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
+          }, 300);
+          setTimeout(()=>setHighlightPostId(null), 3000);
+        }
+        return {...n,read:true};
+      }
+      return n;
+    }));
+    setShowNotif(false);
+  };
 
   // 他ユーザーが自分の投稿から感謝・気づきを押したシミュレーション（30〜60秒ごとにランダム）
   const myPosts = [
@@ -1114,19 +1263,23 @@ export default function THAWARApp() {
     if(type==="thanks"){
       spawnConfetti(x,y,C.thanks);
       setSP(s=>s+1);setThanks(t=>t+1);showToast(1,C.thanks);
-      pushNotif("my_thanks","感謝が記録されました ❤️ 今日も素敵な一日ですね");
+      pushNotif("my_thanks","感謝が記録されました +1SP ❤️");
       setTimeout(()=>setPopup("thanks"),500);
     } else {
       spawnConfetti(x,y,C.awareness);
       setSP(s=>s+3);setAwareness(a=>a+1);showToast(3,C.awareness);
-      pushNotif("my_awareness","前向きな気づきが記録されました ✨ あなたの視点が変わっています");
+      pushNotif("my_awareness","気づきが記録されました +3SP ✨");
       setTimeout(()=>setPopup("awareness"),500);
     }
   };
 
   const handleSave=(text,bonusSP)=>{
-    setSP(s=>s+bonusSP);
-    showToast(bonusSP,popup==="awareness"?C.awareness:C.thanks);
+    const isAw = popup==="awareness";
+    const totalBonus = isAw ? 7 : 4; // 気づき+7SP(合計+10), 感謝+4SP(合計+5)
+    setSP(s=>s+totalBonus);
+    showToast(totalBonus, isAw?C.awareness:C.thanks);
+    if(isAw) pushNotif("my_awareness","気づきのテキストを記録 さらに+7SP ✨ (合計+10SP)");
+    else pushNotif("my_thanks","感謝のテキストを記録 さらに+4SP ❤️ (合計+5SP)");
     setPopup(null);
   };
 
@@ -1219,10 +1372,14 @@ export default function THAWARApp() {
               {threadPosts.map(post=>(
                 post.type==="change_report"
                   ? <ChangeReportCard key={post.id} post={post} users={DUMMY_USERS}
-                      onAction={(e,type)=>doAction(e,type)}/>
+                      onAction={(e,type)=>doAction(e,type)}
+                      highlight={highlightPostId===post.id}/>
                   : <PostCard key={post.id} post={post} users={DUMMY_USERS}
                       onAction={(e,type)=>doAction(e,type)}
-                      onSympathy={(p)=>pushNotif(p.type==="thanks"?"post_thanks":"post_awareness",("「"+p.text.slice(0,22)+"…」を読んで、"+p.type==="thanks"?"感謝":"気づき"+"が生まれたユーザーがいます"))}
+                      highlight={highlightPostId===post.id}
+                      onSympathy={(p)=>pushNotif(p.type==="thanks"?"post_thanks":"post_awareness","「"+p.text.slice(0,22)+"…」を読んで、"+(p.type==="thanks"?"感謝":"気づき")+"が生まれたユーザーがいます", p.id)}
+                    />
+              ))}
                     />
               ))}
             </div>
@@ -1236,6 +1393,7 @@ export default function THAWARApp() {
                 onOpenSettings={()=>setShowSettings(true)}
                 onOpenChangeReport={()=>setShowChangeReport(true)}
                 hasChangeReportNotif={hasChangeReportNotif}
+                onLogout={handleLogout}
               />
             </div>
           )}
@@ -1274,11 +1432,7 @@ export default function THAWARApp() {
                 <div style={{width:52,height:36,borderRadius:14,
                   background:(appTab===t.key&&!showSettings)?C.thanks+"25":"transparent",
                   display:"flex",alignItems:"center",justifyContent:"center",
-                  fontSize:"1.3rem",transition:"background 0.2s"}}>
-                  {t.key==="home"
-                    ? <img src={LOGO_PINK} alt="home" style={{width:28,height:22,objectFit:"contain"}}/>
-                    : t.emoji}
-                </div>
+                  fontSize:"1.3rem",transition:"background 0.2s"}}>{t.emoji}</div>
                 <span style={{fontSize:"0.62rem",fontFamily:F,fontWeight:900,
                   color:(appTab===t.key&&!showSettings)?C.thanks:C.gray}}>{t.label}</span>
               </button>
