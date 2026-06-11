@@ -1163,12 +1163,12 @@ export default function THAWARApp() {
   const [appTab,setAppTab]=useState("home");
   const [showSettings,setShowSettings]=useState(false);
   const [notifications,setNotifications]=useState([
-    {id:1,type:"post_thanks",    message:"「電車でお年寄りに席を譲れた…」を読んで、感謝が生まれたユーザーがいます",       time:"5分前",   read:false},
-    {id:2,type:"post_awareness", message:"「焦っているとき、深呼吸ひとつで…」を読んで、気づきが生まれたユーザーがいます",   time:"28分前",  read:false},
-    {id:3,type:"post_thanks",    message:"「雨が上がって、空がきれいだった…」を読んで、感謝が生まれたユーザーがいます",     time:"1時間前", read:false},
-    {id:4,type:"my_thanks",      message:"感謝が記録されました ❤️ 今日も素敵な一日ですね",                                time:"2時間前", read:true},
-    {id:5,type:"my_awareness",   message:"前向きな気づきが記録されました ✨ あなたの視点が変わっています",                 time:"昨日",    read:true},
-    {id:6,type:"change_report",  message:"先月から1ヶ月が経ちました。変化レポートを書いてみませんか？ ＋3SP",              time:"今日",    read:false},
+    {id:1,type:"post_thanks",    message:"「電車でお年寄りに席を譲れた…」を読んで、感謝が生まれたユーザーがいます",       time:"5分前",   read:false, postId:3},
+    {id:2,type:"post_awareness", message:"「焦っているとき、深呼吸ひとつで…」を読んで、気づきが生まれたユーザーがいます",   time:"28分前",  read:false, postId:2},
+    {id:3,type:"post_thanks",    message:"「雨が上がって、空がきれいだった…」を読んで、感謝が生まれたユーザーがいます",     time:"1時間前", read:false, postId:5},
+    {id:4,type:"my_thanks",      message:"感謝が記録されました +1SP ❤️",                                               time:"2時間前", read:true,  postId:null},
+    {id:5,type:"my_awareness",   message:"気づきが記録されました +3SP ✨",                                              time:"昨日",    read:true,  postId:null},
+    {id:6,type:"change_report",  message:"先月から1ヶ月が経ちました。変化レポートを書いてみませんか？ +5SP",              time:"今日",    read:false, postId:null},
   ]);
   const [showNotif,setShowNotif]=useState(false);
   const [sp,setSP]=useState(284);
@@ -1220,22 +1220,24 @@ export default function THAWARApp() {
 
   const hasChangeReportNotif = notifications.some(n=>n.type==="change_report"&&!n.read);
   const readOne=(id)=>{
-    setNotifications(ns=>ns.map(n=>{
-      if(n.id===id){
-        if(n.postId){
-          setAppTab("thread");
-          setHighlightPostId(n.postId);
-          setTimeout(()=>{
-            const el=document.getElementById("post-"+n.postId);
-            if(el) el.scrollIntoView({behavior:"smooth",block:"center"});
-          }, 300);
-          setTimeout(()=>setHighlightPostId(null), 3000);
-        }
-        return {...n,read:true};
+    setNotifications(ns=>{
+      const updated = ns.map(n=>n.id===id?{...n,read:true}:n);
+      const target = updated.find(n=>n.id===id);
+      if(target && target.postId){
+        const pid = target.postId;
+        setShowNotif(false);
+        setAppTab("thread");
+        setHighlightPostId(pid);
+        setTimeout(()=>{
+          const el = document.getElementById("post-"+pid);
+          if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+        }, 400);
+        setTimeout(()=>setHighlightPostId(null), 3500);
+      } else {
+        setShowNotif(false);
       }
-      return n;
-    }));
-    setShowNotif(false);
+      return updated;
+    });
   };
 
   // 他ユーザーが自分の投稿から感謝・気づきを押したシミュレーション（30〜60秒ごとにランダム）
