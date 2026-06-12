@@ -12,6 +12,130 @@ const ICON_AWARE_GRAY   = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAE
 // const ICON_SYMPATHY_GRAY  = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjQzhCREIwIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+CiAgICA8cGF0aCBkPSJNOCAzNiBMMjAgMjQgTDI4IDI4IEwzNiAyMiBMNDQgMjYiLz4KICAgIDxwYXRoIGQ9Ik00NCAyNiBMNTYgMzYiLz4KICAgIDxwYXRoIGQ9Ik0yMCAyNCBMMTYgMjAgQzE0IDE4IDE0IDE1IDE2IDEzIEMxOCAxMSAyMSAxMSAyMyAxMyBMMjggMTgiLz4KICAgIDxwYXRoIGQ9Ik00NCAyNiBMNDggMjIgQzUwIDIwIDUzIDIwIDU1IDIyIEM1NyAyNCA1NyAyNyA1NSAyOSBMNDggMzYiLz4KICAgIDxwYXRoIGQ9Ik04IDM2IEwxNCA0MiBDMTYgNDQgMTkgNDQgMjEgNDIgTDMyIDMyIEw0MyA0MiBDNDUgNDQgNDggNDQgNTAgNDIgTDU2IDM2Ii8+CiAgICA8cGF0aCBkPSJNMjggMTggTDM2IDIyIi8+CiAgPC9nPgo8L3N2Zz4=";
 // const ICON_SYMPATHY_WHITE = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGcgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPgogICAgPHBhdGggZD0iTTggMzYgTDIwIDI0IEwyOCAyOCBMMzYgMjIgTDQ0IDI2Ii8+CiAgICA8cGF0aCBkPSJNNDQgMjYgTDU2IDM2Ii8+CiAgICA8cGF0aCBkPSJNMjAgMjQgTDE2IDIwIEMxNCAxOCAxNCAxNSAxNiAxMyBDMTggMTEgMjEgMTEgMjMgMTMgTDI4IDE4Ii8+CiAgICA8cGF0aCBkPSJNNDQgMjYgTDQ4IDIyIEM1MCAyMCA1MyAyMCA1NSAyMiBDNTcgMjQgNTcgMjcgNTUgMjkgTDQ4IDM2Ii8+CiAgICA8cGF0aCBkPSJNOCAzNiBMMTQgNDIgQzE2IDQ0IDE5IDQ0IDIxIDQyIEwzMiAzMiBMNDMgNDIgQzQ1IDQ0IDQ4IDQ0IDUwIDQyIEw1NiAzNiIvPgogICAgPHBhdGggZD0iTTI4IDE4IEwzNiAyMiIvPgogIDwvZz4KPC9zdmc+";
 
+
+// ===== LANGUAGE =====
+const TRANSLATIONS = {
+  ja: {
+    // タブ
+    tab_home: "ホーム", tab_thread: "スレッド", tab_me: "自分",
+    // ランディング
+    landing_tagline: "感謝と気づきで、人生を軽く。",
+    landing_cta: "THAWARを利用する",
+    landing_q1: "最近モヤモヤしていませんか？",
+    landing_q2: "人間関係に悩んでいませんか？",
+    landing_q3: "もっと楽に生きたいと思っていませんか？",
+    landing_desc: "THAWARは、そんなあなたのための小さな習慣アプリです。",
+    landing_simple: "やることはとても簡単。",
+    landing_btn_desc: "「感謝ボタン」と「気づきボタン」を押して、日々の中で感じた感謝や気づきを記録するだけです。",
+    landing_small: "大きな出来事である必要はありません。",
+    landing_thanks_end: "そんな小さな感謝で十分です。",
+    landing_aware_end: "そんな小さな気づきも大切な記録です。",
+    landing_also: "また、",
+    landing_change: "記録を続けるうちに、自分でも気づかなかった考え方の癖や、人との関わり方の変化が見えてくるかもしれません。",
+    landing_not_answer: "THAWARは答えを教えるアプリではありません。",
+    landing_mirror: "あなた自身の変化を映し出す鏡のようなアプリです。",
+    landing_try: "感謝や気づきの記録を続けることで生まれる変化を、ぜひ体験してみてください。",
+    // ログイン
+    login_title: "おかえりなさい", login_email: "メールアドレス", login_pass: "パスワード",
+    login_btn: "ログインする", login_to_register: "新規登録はこちら",
+    login_no_account: "アカウントをお持ちでない方",
+    // 登録
+    register_title: "新規登録", register_btn: "登録してはじめる 🎉",
+    register_to_login: "← ログインに戻る",
+    // ホーム
+    home_today: "📅 今日のあなたの記録",
+    home_feed: "💬 みんなの感謝と気づき",
+    home_hint: "ボタンを押すだけでOK！",
+    home_hint2: "か",
+    // アクション
+    thanks: "感謝", awareness: "気づき", later: "あとで", post: "投稿する",
+    empathy: "共感", read_all: "すべて既読",
+    // 通知
+    notif_title: "🔔 通知", notif_empty: "まだ通知はありません",
+    // マイページ
+    my_records: "📖 わたしの記録",
+    tab_all: "すべて", tab_thanks: "感謝", tab_awareness: "気づき", tab_change: "変化",
+    add_detail: "＋ 内容を記入する", edit: "✏️ 編集",
+    cancel: t.cancel, save: "保存", logout: "ログアウト",
+    no_records: "まだ記録がありません",
+    // 変化レポート
+    change_report: "変化レポート", write_change: "変化レポートを書く",
+    change_notif: "変化レポートを投稿しませんか？",
+    change_sub: "感謝・気づきを続けて感じた変化を記録しよう",
+    write: "書く", ongoing: "記録中",
+    // 設定
+    choose_icon: "アイコンを選ぶ", edit_profile: "プロフィール編集",
+    nickname: "ニックネーム", email: "メールアドレス",
+    pass_change: "パスワード（変更する場合のみ）",
+    save_btn: "保存する", saved: "✅ 保存しました！",
+    back: "← 戻る", settings: "設定",
+    icon_hint: "上の画像から選ぶか、✏️で自分の写真をアップ",
+    new_pass: t.new_pass, show: "表示", hide: "隠す",
+  },
+  en: {
+    // Tabs
+    tab_home: "Home", tab_thread: "Thread", tab_me: "Me",
+    // Landing
+    landing_tagline: "Gratitude & Awareness. Lighten your life.",
+    landing_cta: "Get Started",
+    landing_q1: "Feeling unsettled lately?",
+    landing_q2: "Struggling with relationships?",
+    landing_q3: "Wishing life felt a little lighter?",
+    landing_desc: "THAWAR is a small habit app made just for you.",
+    landing_simple: "It's really simple.",
+    landing_btn_desc: "Just tap the Thanks or Awareness button to record moments of gratitude and insight from your day.",
+    landing_small: "It doesn't have to be something big.",
+    landing_thanks_end: "Small moments of gratitude are enough.",
+    landing_aware_end: "Small insights matter too.",
+    landing_also: "Also,",
+    landing_change: "As you keep recording, you may start to notice patterns in your thinking and shifts in how you relate to others.",
+    landing_not_answer: "THAWAR doesn't give you answers.",
+    landing_mirror: "It's like a mirror reflecting your own growth.",
+    landing_try: "Experience the change that comes from continuing to record gratitude and awareness.",
+    // Login
+    login_title: "Welcome back", login_email: "Email", login_pass: "Password",
+    login_btn: "Sign In", login_to_register: "Sign up here",
+    login_no_account: "Don't have an account?",
+    // Register
+    register_title: "Create Account", register_btn: "Get Started 🎉",
+    register_to_login: "← Back to Login",
+    // Home
+    home_today: "📅 Today's Record",
+    home_feed: "💬 Community Feed",
+    home_hint: "Just tap a button!",
+    home_hint2: "or",
+    // Actions
+    thanks: "Thanks", awareness: "Awareness", later: "Later", post: "Post",
+    empathy: "Empathy", read_all: "Mark all read",
+    // Notifications
+    notif_title: "🔔 Notifications", notif_empty: "No notifications yet",
+    // My Page
+    my_records: "📖 My Records",
+    tab_all: "All", tab_thanks: "Thanks", tab_awareness: "Awareness", tab_change: "Change",
+    add_detail: "+ Add details", edit: "✏️ Edit",
+    cancel: "Cancel", save: "Save", logout: "Logout",
+    no_records: "No records yet",
+    // Change Report
+    change_report: "Change Report", write_change: "Write Change Report",
+    change_notif: "Share your change report?",
+    change_sub: "Record the change you've felt",
+    write: "Write", ongoing: "Ongoing",
+    // Settings
+    choose_icon: "Choose Icon", edit_profile: "Edit Profile",
+    nickname: "Nickname", email: "Email",
+    pass_change: "Password (only if changing)",
+    save_btn: "Save", saved: "✅ Saved!",
+    back: "← Back", settings: "Settings",
+    icon_hint: "Choose from above or tap ✏️ to upload your photo",
+    new_pass: "New Password", show: "Show", hide: "Hide",
+  },
+};
+
+function detectLang() {
+  const lang = navigator.language || navigator.userLanguage || 'en';
+  return lang.startsWith('ja') ? 'ja' : 'en';
+}
+
 const C = {
   thanks:       "#DD2475",
   thanksDeep:   "#B01A5C",
@@ -222,7 +346,7 @@ function NotificationPanel({ notifications, onClose, onReadAll, onReadOne }) {
               <button onClick={onReadAll} style={{
                 background:"none", border:"none", cursor:"pointer",
                 fontFamily:F, fontWeight:800, fontSize:"0.72rem", color:C.thanks,
-              }}>すべて既読</button>
+              }}>{t.read_all}</button>
             )}
             <button onClick={onClose} style={{
               width:32, height:32, borderRadius:"50%",
@@ -678,17 +802,17 @@ const MOCK_LOGS = [
   {id:9,type:"change_report", text:"感謝を始めて1ヶ月。朝の時間が少し豊かになった気がする。", time:"1週間前", hasText:true},
 ];
 
-function LogList() {
+function LogList({ t }) {
   const [activeTab, setActiveTab] = useState("all");
   const [logs, setLogs] = useState(MOCK_LOGS);
   const [editId, setEditId] = useState(null);
   const [editText, setEditText] = useState("");
 
   const tabs = [
-    {key:"all",           label:"すべて",   color:C.text},
-    {key:"thanks",        label:"感謝",     color:C.thanks},
-    {key:"awareness",     label:"気づき",   color:C.awareness},
-    {key:"change_report", label:"変化",     color:"#8B5CF6"},
+    {key:"all",           label:t.tab_all,   color:C.text},
+    {key:"thanks",        label:t.tab_thanks,     color:C.thanks},
+    {key:"awareness",     label:t.tab_awareness,   color:C.awareness},
+    {key:"change_report", label:t.tab_change,     color:"#8B5CF6"},
   ];
 
   const filtered = activeTab==="all" ? logs : logs.filter(l=>l.type===activeTab);
@@ -763,7 +887,7 @@ function LogList() {
                   <div style={{display:"flex",gap:8,marginTop:8}}>
                     <button onClick={()=>setEditId(null)} style={{flex:1,padding:"8px",borderRadius:12,
                       border:("2px solid "+C.sub2),background:"#fff",color:C.gray,
-                      fontFamily:F,fontWeight:800,fontSize:"0.8rem",cursor:"pointer"}}>キャンセル</button>
+                      fontFamily:F,fontWeight:800,fontSize:"0.8rem",cursor:"pointer"}}>{t.cancel}</button>
                     <button onClick={()=>saveEdit(log.id)} style={{flex:2,padding:"8px",borderRadius:12,
                       border:"none",background:editText.trim()?cfg.color:C.sub2,
                       color:editText.trim()?"#fff":C.gray,
@@ -883,7 +1007,7 @@ function LevelCard({ sp, onOpenSettings, user }) {
   );
 }
 
-function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeReport, hasChangeReportNotif, onLogout, onUpdate }) {
+function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeReport, hasChangeReportNotif, onLogout, onUpdate, t }) {
   const [showSettings, setShowSettings] = useState(false);
   const weekData=[12,8,15,22,11,30,18];
   const days=["月","火","水","木","金","土","日"];
@@ -894,10 +1018,10 @@ function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeRepor
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
         <button onClick={()=>setShowSettings(false)} style={{background:"none",border:"none",
           cursor:"pointer",fontFamily:F,fontWeight:800,fontSize:"0.88rem",color:C.gray,
-          display:"flex",alignItems:"center",gap:4}}>← 戻る</button>
-        <div style={{fontFamily:F,fontWeight:900,fontSize:"0.95rem",color:C.text}}>設定</div>
+          display:"flex",alignItems:"center",gap:4}}>{t.back}</button>
+        <div style={{fontFamily:F,fontWeight:900,fontSize:"0.95rem",color:C.text}}>{t.settings}</div>
       </div>
-      <SettingsScreen user={user} onUpdate={(u)=>{onUpdate(u);setShowSettings(false);}} onLogout={onLogout}/>
+      <SettingsScreen user={user} onUpdate={(u)=>{onUpdate(u);setShowSettings(false);}} onLogout={onLogout} t={t}/>
     </div>
   );
   return (
@@ -1009,14 +1133,29 @@ function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeRepor
       </div>
 
       {/* 記録リスト */}
-      <LogList/>
+      <LogList t={t}/>
 
 
     </div>
   );
 }
 
-function LandingScreen({ onStart }) {
+
+// ===== LANGUAGE TOGGLE =====
+function LangToggle({ lang, setLang }) {
+  return (
+    <button onClick={()=>setLang(l=>l==="ja"?"en":"ja")} style={{
+      background:"rgba(255,255,255,0.9)", border:"2px solid #DFD4C8",
+      borderRadius:99, padding:"5px 12px", cursor:"pointer",
+      fontFamily:F, fontWeight:900, fontSize:"0.75rem", color:"#383838",
+      boxShadow:"0 2px 0 #C8BDB0", display:"flex", alignItems:"center", gap:4,
+    }}>
+      {lang==="ja" ? "🇯🇵 JP" : "🇺🇸 EN"}
+    </button>
+  );
+}
+
+function LandingScreen({ onStart, lang, setLang, t }) {
   const btnStyle = {
     display:"block", width:"100%", padding:"18px",
     borderRadius:20, border:"none",
@@ -1090,14 +1229,14 @@ function LandingScreen({ onStart }) {
         </div>
         {/* 下部ボタン */}
         <div style={{marginTop:28}}>
-          <button onClick={onStart} style={btnStyle}>THAWARを利用する</button>
+          <button onClick={onStart} style={btnStyle}>{t.landing_cta}</button>
         </div>
       </div>
     </div>
   );
 }
 
-function LoginScreen({ onLogin, onGoRegister }) {
+function LoginScreen({ onLogin, onGoRegister, lang, setLang, t }) {
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const [error,setError]=useState("");
@@ -1129,6 +1268,7 @@ function LoginScreen({ onLogin, onGoRegister }) {
       <div style={{width:"100%",maxWidth:390}}>
         <div style={{textAlign:"center",marginBottom:32}}>
           <img src={LOGO_PINK} alt="THAWAR" style={{height:52,objectFit:"contain"}}/>
+          <div style={{marginTop:8}}><LangToggle lang={lang} setLang={setLang}/></div>
           <div style={{fontFamily:F,fontSize:"0.78rem",color:C.gray,fontWeight:700,marginTop:10,letterSpacing:"0.08em"}}>感謝と気づきで、人生を軽く。</div>
         </div>
         <div style={{background:C.white,borderRadius:28,padding:"28px 24px",
@@ -1161,12 +1301,12 @@ function LoginScreen({ onLogin, onGoRegister }) {
 }
 
 // ===== REGISTER =====
-function RegisterScreen({ onRegister, onBack }) {
+function RegisterScreen({ onRegister, onBack, lang, setLang, t }) {
   return (<div style={{minHeight:"100vh",background:"linear-gradient(160deg,#D8C1DD55,#FCF8F5)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"20px"}}><div style={{width:"100%",maxWidth:390,background:"#fff",borderRadius:28,padding:"28px 24px",boxShadow:"0 7px 0 #DFD4C8",border:"2px solid #DFD4C8"}}><div style={{fontFamily:F,fontWeight:900,fontSize:"1.2rem",color:"#383838",marginBottom:20,textAlign:"center"}}>新規登録</div><button onClick={()=>{const idx=Math.floor(Math.random()*AVATAR_OPTIONS.length);onRegister({id:99,nickname:"テスト",email:"test@example.com",password:"pass",icon:AVATAR_OPTIONS[idx],iconType:"url",streak:0,sp:0,thanks:0,awareness:0});}} style={{width:"100%",padding:"16px",borderRadius:18,border:"none",background:"#DD2475",color:"#fff",fontFamily:F,fontWeight:900,fontSize:"1rem",cursor:"pointer",boxShadow:"0 5px 0 #B01A5C",marginBottom:14}}>登録してはじめる 🎉</button><div style={{textAlign:"center"}}><button onClick={onBack} style={{background:"none",border:"none",cursor:"pointer",fontFamily:F,fontWeight:800,fontSize:"0.82rem",color:"#9E9E9E"}}>← ログインに戻る</button></div></div></div>);
 }
 
 // ===== SETTINGS =====
-function SettingsScreen({ user, onUpdate, onLogout }) {
+function SettingsScreen({ user, onUpdate, onLogout, t }) {
   const [nickname, setNickname] = useState(user.nickname);
   const [email, setEmail]       = useState(user.email);
   const [password, setPassword] = useState('');
@@ -1265,24 +1405,24 @@ function SettingsScreen({ user, onUpdate, onLogout }) {
           プロフィール編集
         </div>
 
-        <label style={labelStyle}>ニックネーム</label>
+        <label style={labelStyle}>{t.nickname}</label>
         <input value={nickname} onChange={e=>setNickname(e.target.value)}
           placeholder={user.nickname} style={inputStyle}/>
 
-        <label style={labelStyle}>メールアドレス</label>
+        <label style={labelStyle}>{t.email}</label>
         <input value={email} onChange={e=>setEmail(e.target.value)}
           type="email" placeholder={user.email} style={inputStyle}/>
 
-        <label style={labelStyle}>パスワード（変更する場合のみ）</label>
+        <label style={labelStyle}>{t.pass_change}</label>
         <div style={{position:'relative',marginBottom:10}}>
           <input value={password} onChange={e=>setPassword(e.target.value)}
-            type={showPass?'text':'password'} placeholder="新しいパスワード"
+            type={showPass?'text':'password'} placeholder=t.new_pass
             style={{...inputStyle,marginBottom:0,paddingRight:44}}/>
           <button onClick={()=>setShowPass(!showPass)} style={{
             position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',
             background:'none',border:'none',cursor:'pointer',
             fontFamily:F,fontSize:'0.72rem',color:C.gray,fontWeight:700}}>
-            {showPass?'隠す':'表示'}
+            {showPass?t.hide:t.show}
           </button>
         </div>
 
@@ -1293,7 +1433,7 @@ function SettingsScreen({ user, onUpdate, onLogout }) {
           boxShadow:('0 4px 0 '+C.thanksDeep),
           transition:'all 0.2s',
         }}>
-          {saved ? '✅ 保存しました！' : '保存する'}
+          {saved ? t.saved : t.save_btn}
         </button>
       </div>
 
@@ -1312,6 +1452,8 @@ function SettingsScreen({ user, onUpdate, onLogout }) {
 
 
 export default function THAWARApp() {
+  const [lang, setLang] = useState(detectLang);
+  const t = TRANSLATIONS[lang];
   const [screen,setScreen]=useState("landing");
   const [currentUser,setCurrentUser]=useState(null);
   const [appTab,setAppTab]=useState("home");
@@ -1427,9 +1569,9 @@ export default function THAWARApp() {
 
   // 3タブのみ
   const tabs=[
-    {key:"home",   label:"ホーム",   emoji:"🏠"},
-    {key:"thread", label:"スレッド", emoji:"💬"},
-    {key:"mypage", label:"自分",     emoji:"👤"},
+    {key:"home",   label:t.tab_home,   emoji:"🏠"},
+    {key:"thread", label:t.tab_thread, emoji:"💬"},
+    {key:"mypage", label:t.tab_me,     emoji:"👤"},
   ];
 
   if(screen==="landing") return (<><LandingScreen onStart={()=>setScreen("login")}/></>);
@@ -1444,6 +1586,7 @@ export default function THAWARApp() {
         <div style={{background:C.sub1,padding:"52px 20px 14px",position:"sticky",top:0,zIndex:100,borderBottom:("2px solid "+C.sub2)}}>
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
             <img src={LOGO_PINK} alt="THAWAR" style={{height:34,objectFit:"contain"}}/>
+            <LangToggle lang={lang} setLang={setLang}/>
             <div style={{display:"flex",gap:8,alignItems:"center"}}>
               <NotificationBell notifications={notifications} onOpen={()=>setShowNotif(true)}/>
               <StreakFlame days={currentUser?.streak||0}/>
@@ -1471,7 +1614,7 @@ export default function THAWARApp() {
               </div>
               <div style={{background:C.white,borderRadius:22,padding:"18px",
                 boxShadow:"0 5px 0 #DFD4C8",border:("2px solid "+C.sub2),marginBottom:16}}>
-                <div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:C.text,marginBottom:14}}>📅 今日のあなたの記録</div>
+                <div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:C.text,marginBottom:14}}>{t.home_today}</div>
                 <div style={{display:"flex",gap:10}}>
                   {[
                     {label:"Thanks",value:thanks,color:C.thanks,deep:C.thanksDeep,icon:ICON_THANKS_WHITE},
@@ -1498,7 +1641,7 @@ export default function THAWARApp() {
 
           {appTab==="thread"&&(
             <div style={{animation:"fadeIn 0.3s ease"}}>
-              <div style={{fontFamily:F,fontWeight:800,fontSize:"0.8rem",color:C.gray,marginBottom:14,letterSpacing:"0.06em"}}>💬 みんなの感謝と気づき</div>
+              <div style={{fontFamily:F,fontWeight:800,fontSize:"0.8rem",color:C.gray,marginBottom:14,letterSpacing:"0.06em"}}>{t.home_feed}</div>
               {threadPosts.map(post=>(
                 post.type==="change_report"
                   ? <ChangeReportCard key={post.id} post={post} users={DUMMY_USERS}
@@ -1521,6 +1664,7 @@ export default function THAWARApp() {
                 hasChangeReportNotif={hasChangeReportNotif}
                 onLogout={handleLogout}
                 onUpdate={setCurrentUser}
+                t={t}
               />
             </div>
           )}
