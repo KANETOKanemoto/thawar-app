@@ -56,7 +56,7 @@ const TRANSLATIONS = {
     my_records: "📖 わたしの記録",
     tab_all: "すべて", tab_thanks: "感謝", tab_awareness: "気づき", tab_change: "変化",
     add_detail: "＋ 内容を記入する", edit: "✏️ 編集",
-    cancel: t.cancel, save: "保存", logout: "ログアウト",
+    cancel: "キャンセル", save: "保存", logout: "ログアウト",
     no_records: "まだ記録がありません",
     // 変化レポート
     change_report: "変化レポート", write_change: "変化レポートを書く",
@@ -70,7 +70,7 @@ const TRANSLATIONS = {
     save_btn: "保存する", saved: "✅ 保存しました！",
     back: "← 戻る", settings: "設定",
     icon_hint: "上の画像から選ぶか、✏️で自分の写真をアップ",
-    new_pass: t.new_pass, show: "表示", hide: "隠す",
+    new_pass: "新しいパスワード", show: "表示", hide: "隠す",
   },
   en: {
     // Tabs
