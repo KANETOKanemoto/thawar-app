@@ -883,14 +883,26 @@ function LevelCard({ sp, onOpenSettings, user }) {
   );
 }
 
-function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeReport, hasChangeReportNotif, onLogout }) {
+function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeReport, hasChangeReportNotif, onLogout, onUpdate }) {
+  const [showSettings, setShowSettings] = useState(false);
   const weekData=[12,8,15,22,11,30,18];
   const days=["月","火","水","木","金","土","日"];
   const maxVal=Math.max(...weekData);
   const bonuses=[{days:1,sp:1},{days:3,sp:2},{days:7,sp:5},{days:10,sp:10},{days:30,sp:30}];
+  if(showSettings) return (
+    <div style={{animation:"fadeIn 0.3s ease"}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
+        <button onClick={()=>setShowSettings(false)} style={{background:"none",border:"none",
+          cursor:"pointer",fontFamily:F,fontWeight:800,fontSize:"0.88rem",color:C.gray,
+          display:"flex",alignItems:"center",gap:4}}>← 戻る</button>
+        <div style={{fontFamily:F,fontWeight:900,fontSize:"0.95rem",color:C.text}}>設定</div>
+      </div>
+      <SettingsScreen user={user} onUpdate={(u)=>{onUpdate(u);setShowSettings(false);}} onLogout={onLogout}/>
+    </div>
+  );
   return (
     <div>
-      <LevelCard sp={sp} onOpenSettings={onOpenSettings} user={user}/>
+      <LevelCard sp={sp} onOpenSettings={()=>setShowSettings(true)} user={user}/>
 
       {/* 変化レポートCTA */}
       <div style={{background: hasChangeReportNotif ? "#FAF7FD" : "#FAF7FD",
@@ -999,15 +1011,7 @@ function MyPage({ user, sp, thanks, awareness, onOpenSettings, onOpenChangeRepor
       {/* 記録リスト */}
       <LogList/>
 
-      {/* ログアウト */}
-      <div style={{background:C.white,borderRadius:22,padding:"16px",marginBottom:16,
-        boxShadow:"0 4px 0 #DFD4C8",border:("2px solid "+C.sub2)}}>
-        <button onClick={onLogout} style={{width:"100%",padding:"14px",borderRadius:16,
-          border:("2px solid "+C.sub2),background:"#fff",
-          color:C.gray,fontFamily:F,fontWeight:800,fontSize:"0.9rem",cursor:"pointer"}}>
-          ログアウト
-        </button>
-      </div>
+
     </div>
   );
 }
@@ -1163,13 +1167,148 @@ function RegisterScreen({ onRegister, onBack }) {
 
 // ===== SETTINGS =====
 function SettingsScreen({ user, onUpdate, onLogout }) {
-  return (<div><div style={{background:"#fff",borderRadius:22,padding:"20px",boxShadow:"0 5px 0 #DFD4C8",border:"2px solid #DFD4C8",marginBottom:16}}><div style={{fontFamily:F,fontWeight:900,fontSize:"0.9rem",color:"#383838",marginBottom:16}}>👤 プロフィール設定</div><div style={{fontFamily:F,fontSize:"0.85rem",color:"#9E9E9E",marginBottom:16}}>ニックネーム: {user.nickname}</div><button onClick={()=>onUpdate(user)} style={{width:"100%",padding:"14px",borderRadius:16,border:"none",background:"#DD2475",color:"#fff",fontFamily:F,fontWeight:900,fontSize:"0.9rem",cursor:"pointer",boxShadow:"0 4px 0 #B01A5C",marginBottom:12}}>保存</button><button onClick={onLogout} style={{width:"100%",padding:"14px",borderRadius:16,border:"2px solid #DFD4C8",background:"#fff",color:"#9E9E9E",fontFamily:F,fontWeight:800,fontSize:"0.9rem",cursor:"pointer"}}>ログアウト</button></div></div>);
+  const [nickname, setNickname] = useState(user.nickname);
+  const [email, setEmail]       = useState(user.email);
+  const [password, setPassword] = useState('');
+  const [showPass, setShowPass] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState(user.icon);
+  const [saved, setSaved] = useState(false);
+  const fileRef = useRef(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setSelectedIcon(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = () => {
+    onUpdate({
+      ...user,
+      nickname: nickname.trim() || user.nickname,
+      email: email.trim() || user.email,
+      password: password || user.password,
+      icon: selectedIcon,
+      iconType: 'url',
+    });
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const inputStyle = {
+    width:'100%', padding:'12px 14px', borderRadius:14,
+    border:('2px solid '+C.sub2), background:'#fff',
+    fontFamily:F, fontSize:'0.88rem', color:C.text,
+    outline:'none', boxSizing:'border-box', marginBottom:10,
+  };
+  const labelStyle = {
+    fontFamily:F, fontWeight:800, fontSize:'0.72rem',
+    color:C.gray, marginBottom:4, display:'block',
+  };
+
+  return (
+    <div>
+      {/* アイコン設定 */}
+      <div style={{background:C.white,borderRadius:22,padding:'20px',
+        boxShadow:'0 5px 0 #DFD4C8',border:('2px solid '+C.sub2),marginBottom:14}}>
+        <div style={{fontFamily:F,fontWeight:900,fontSize:'0.88rem',color:C.text,marginBottom:16}}>
+          アイコンを選ぶ
+        </div>
+
+        {/* 現在のアイコン */}
+        <div style={{display:'flex',justifyContent:'center',marginBottom:16}}>
+          <div style={{position:'relative',width:80,height:80}}>
+            <img src={selectedIcon} alt="icon"
+              style={{width:80,height:80,borderRadius:'50%',objectFit:'cover',
+                border:('3px solid '+C.thanks),boxShadow:('0 4px 0 '+C.thanksDeep)}}/>
+            <button onClick={()=>fileRef.current&&fileRef.current.click()} style={{
+              position:'absolute',bottom:0,right:0,width:26,height:26,
+              borderRadius:'50%',background:C.thanks,border:'2px solid #fff',
+              display:'flex',alignItems:'center',justifyContent:'center',
+              cursor:'pointer',fontSize:'0.75rem',boxShadow:('0 2px 0 '+C.thanksDeep)}}>
+              ✏️
+            </button>
+            <input ref={fileRef} type="file" accept="image/*"
+              onChange={handleImageUpload} style={{display:'none'}}/>
+          </div>
+        </div>
+
+        {/* 12枚のアバター選択 */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(6,1fr)',gap:8}}>
+          {AVATAR_OPTIONS.map((av,i) => (
+            <button key={i} onClick={()=>setSelectedIcon(av)} style={{
+              background:'none',border:'none',cursor:'pointer',padding:0,
+              borderRadius:'50%',
+              outline:selectedIcon===av?('3px solid '+C.thanks):'none',
+              outlineOffset:2,
+            }}>
+              <img src={av} alt={'avatar'+i}
+                style={{width:'100%',aspectRatio:'1',borderRadius:'50%',
+                  objectFit:'cover',display:'block',
+                  opacity:selectedIcon===av?1:0.7,
+                  transform:selectedIcon===av?'scale(1.1)':'scale(1)',
+                  transition:'all 0.15s'}}/>
+            </button>
+          ))}
+        </div>
+        <div style={{fontFamily:F,fontSize:'0.68rem',color:C.gray,
+          textAlign:'center',marginTop:8,fontWeight:600}}>
+          上の画像から選ぶか、✏️で自分の写真をアップ
+        </div>
+      </div>
+
+      {/* プロフィール編集 */}
+      <div style={{background:C.white,borderRadius:22,padding:'20px',
+        boxShadow:'0 5px 0 #DFD4C8',border:('2px solid '+C.sub2),marginBottom:14}}>
+        <div style={{fontFamily:F,fontWeight:900,fontSize:'0.88rem',color:C.text,marginBottom:16}}>
+          プロフィール編集
+        </div>
+
+        <label style={labelStyle}>ニックネーム</label>
+        <input value={nickname} onChange={e=>setNickname(e.target.value)}
+          placeholder={user.nickname} style={inputStyle}/>
+
+        <label style={labelStyle}>メールアドレス</label>
+        <input value={email} onChange={e=>setEmail(e.target.value)}
+          type="email" placeholder={user.email} style={inputStyle}/>
+
+        <label style={labelStyle}>パスワード（変更する場合のみ）</label>
+        <div style={{position:'relative',marginBottom:10}}>
+          <input value={password} onChange={e=>setPassword(e.target.value)}
+            type={showPass?'text':'password'} placeholder="新しいパスワード"
+            style={{...inputStyle,marginBottom:0,paddingRight:44}}/>
+          <button onClick={()=>setShowPass(!showPass)} style={{
+            position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',
+            background:'none',border:'none',cursor:'pointer',
+            fontFamily:F,fontSize:'0.72rem',color:C.gray,fontWeight:700}}>
+            {showPass?'隠す':'表示'}
+          </button>
+        </div>
+
+        <button onClick={handleSave} style={{
+          width:'100%',padding:'14px',borderRadius:16,border:'none',
+          background:C.thanks,color:'#fff',fontFamily:F,fontWeight:900,
+          fontSize:'0.9rem',cursor:'pointer',
+          boxShadow:('0 4px 0 '+C.thanksDeep),
+          transition:'all 0.2s',
+        }}>
+          {saved ? '✅ 保存しました！' : '保存する'}
+        </button>
+      </div>
+
+      {/* ログアウト */}
+      <div style={{background:C.white,borderRadius:22,padding:'16px',
+        boxShadow:'0 4px 0 #DFD4C8',border:('2px solid '+C.sub2),marginBottom:16}}>
+        <button onClick={onLogout} style={{width:'100%',padding:'14px',borderRadius:16,
+          border:('2px solid '+C.sub2),background:'#fff',
+          color:C.gray,fontFamily:F,fontWeight:800,fontSize:'0.9rem',cursor:'pointer'}}>
+          ログアウト
+        </button>
+      </div>
+    </div>
+  );
 }
-
-
-// ===== MAIN APP =====
-
-// ===== MAIN APP =====
 
 
 export default function THAWARApp() {
@@ -1178,12 +1317,12 @@ export default function THAWARApp() {
   const [appTab,setAppTab]=useState("home");
   const [showSettings,setShowSettings]=useState(false);
   const [notifications,setNotifications]=useState([
-    {id:1,type:"post_thanks",    message:"「電車でお年寄りに席を譲れた…」を読んで、感謝が生まれたユーザーがいます",       time:"5分前",   read:false, postId:3},
-    {id:2,type:"post_awareness", message:"「焦っているとき、深呼吸ひとつで…」を読んで、気づきが生まれたユーザーがいます",   time:"28分前",  read:false, postId:2},
-    {id:3,type:"post_thanks",    message:"「雨が上がって、空がきれいだった…」を読んで、感謝が生まれたユーザーがいます",     time:"1時間前", read:false, postId:5},
-    {id:4,type:"my_thanks",      message:"感謝が記録されました +1SP ❤️",                                               time:"2時間前", read:true,  postId:null},
-    {id:5,type:"my_awareness",   message:"気づきが記録されました +3SP ✨",                                              time:"昨日",    read:true,  postId:null},
-    {id:6,type:"change_report",  message:"先月から1ヶ月が経ちました。変化レポートを書いてみませんか？ +5SP",              time:"今日",    read:false, postId:null},
+    {id:1,type:"post_thanks",    message:"「電車でお年寄りに席を譲れた…」を読んで、感謝が生まれたユーザーがいます",       time:"5分前",   read:false},
+    {id:2,type:"post_awareness", message:"「焦っているとき、深呼吸ひとつで…」を読んで、気づきが生まれたユーザーがいます",   time:"28分前",  read:false},
+    {id:3,type:"post_thanks",    message:"「雨が上がって、空がきれいだった…」を読んで、感謝が生まれたユーザーがいます",     time:"1時間前", read:false},
+    {id:4,type:"my_thanks",      message:"感謝が記録されました ❤️ 今日も素敵な一日ですね",                                time:"2時間前", read:true},
+    {id:5,type:"my_awareness",   message:"前向きな気づきが記録されました ✨ あなたの視点が変わっています",                 time:"昨日",    read:true},
+    {id:6,type:"change_report",  message:"先月から1ヶ月が経ちました。変化レポートを書いてみませんか？ ＋3SP",              time:"今日",    read:false},
   ]);
   const [showNotif,setShowNotif]=useState(false);
   const [sp,setSP]=useState(284);
@@ -1194,7 +1333,6 @@ export default function THAWARApp() {
   const [popup,setPopup]=useState(null);
   const [showChangeReport,setShowChangeReport]=useState(false);
   const [threadPosts,setThreadPosts]=useState(mockPosts);
-  const [highlightPostId,setHighlightPostId]=useState(null);
   const idRef=useRef(0);
   const nextId=()=>++idRef.current;
 
@@ -1207,10 +1345,10 @@ export default function THAWARApp() {
   const handleRegister=(u)=>{setCurrentUser(u);setSP(0);setThanks(0);setAwareness(0);setScreen("app");};
   const handleLogout=()=>{setCurrentUser(null);setScreen("login");setAppTab("home");setShowSettings(false);};
 
-  const pushNotif=(type,message,postId=null)=>{
+  const pushNotif=(type,message)=>{
     const id=nextId();
     const times=["たった今","1分前","2分前"];
-    setNotifications(ns=>[{id:id,type:type,message:message,time:times[0],read:false,postId:postId},...ns]);
+    setNotifications(ns=>[{id:id,type:type,message:message,time:times[0],read:false},...ns]);
   };
 
   const readAll=()=>setNotifications(ns=>ns.map(n=>({...n,read:true})));
@@ -1225,35 +1363,14 @@ export default function THAWARApp() {
       period:"記録中",
     };
     setThreadPosts(ps=>[newPost,...ps]);
-    const postBonus = 15;
-    setSP(s=>s+postBonus);
-    showToast(postBonus, "#8B5CF6");
-    pushNotif("change_report","変化レポートを投稿 +15SP 🌱 (合計+20SP獲得！)");
+    setSP(s=>s+spAmt);
+    pushNotif("change_report","変化レポートを投稿しました [Leaf] ＋"+spAmt+"SP獲得！");
     setShowChangeReport(false);
     setAppTab("thread");
   };
 
   const hasChangeReportNotif = notifications.some(n=>n.type==="change_report"&&!n.read);
-  const readOne=(id)=>{
-    setNotifications(ns=>{
-      const updated = ns.map(n=>n.id===id?{...n,read:true}:n);
-      const target = updated.find(n=>n.id===id);
-      if(target && target.postId){
-        const pid = target.postId;
-        setShowNotif(false);
-        setAppTab("thread");
-        setHighlightPostId(pid);
-        setTimeout(()=>{
-          const el = document.getElementById("post-"+pid);
-          if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
-        }, 400);
-        setTimeout(()=>setHighlightPostId(null), 3500);
-      } else {
-        setShowNotif(false);
-      }
-      return updated;
-    });
-  };
+  const readOne=(id)=>setNotifications(ns=>ns.map(n=>n.id===id?{...n,read:true}:n));
 
   // 他ユーザーが自分の投稿から感謝・気づきを押したシミュレーション（30〜60秒ごとにランダム）
   const myPosts = [
@@ -1280,23 +1397,19 @@ export default function THAWARApp() {
     if(type==="thanks"){
       spawnConfetti(x,y,C.thanks);
       setSP(s=>s+1);setThanks(t=>t+1);showToast(1,C.thanks);
-      pushNotif("my_thanks","感謝が記録されました +1SP ❤️");
+      pushNotif("my_thanks","感謝が記録されました ❤️ 今日も素敵な一日ですね");
       setTimeout(()=>setPopup("thanks"),500);
     } else {
       spawnConfetti(x,y,C.awareness);
       setSP(s=>s+3);setAwareness(a=>a+1);showToast(3,C.awareness);
-      pushNotif("my_awareness","気づきが記録されました +3SP ✨");
+      pushNotif("my_awareness","前向きな気づきが記録されました ✨ あなたの視点が変わっています");
       setTimeout(()=>setPopup("awareness"),500);
     }
   };
 
   const handleSave=(text,bonusSP)=>{
-    const isAw = popup==="awareness";
-    const totalBonus = isAw ? 7 : 4; // 気づき+7SP(合計+10), 感謝+4SP(合計+5)
-    setSP(s=>s+totalBonus);
-    showToast(totalBonus, isAw?C.awareness:C.thanks);
-    if(isAw) pushNotif("my_awareness","気づきのテキストを記録 さらに+7SP ✨ (合計+10SP)");
-    else pushNotif("my_thanks","感謝のテキストを記録 さらに+4SP ❤️ (合計+5SP)");
+    setSP(s=>s+bonusSP);
+    showToast(bonusSP,popup==="awareness"?C.awareness:C.thanks);
     setPopup(null);
   };
 
@@ -1314,17 +1427,17 @@ export default function THAWARApp() {
 
   // 3タブのみ
   const tabs=[
-    {key:"home",   label:"ホーム",   emoji:"🏠"},
-    {key:"thread", label:"スレッド", emoji:"💬"},
-    {key:"mypage", label:"自分",     emoji:"👤"},
+    {key:"home",   label:"ホーム",   emoji:"[Home]"},
+    {key:"thread", label:"スレッド", emoji:"[Chat]"},
+    {key:"mypage", label:"自分",     emoji:"[Person]"},
   ];
 
-  if(screen==="landing") return (<><style>{CSS}</style><LandingScreen onStart={()=>setScreen("login")}/></>);
-  if(screen==="login") return (<><style>{CSS}</style><LoginScreen onLogin={handleLogin} onGoRegister={()=>setScreen("register")}/></>);
-  if(screen==="register") return (<><style>{CSS}</style><RegisterScreen onRegister={handleRegister} onBack={()=>setScreen("login")}/></>);
+  if(screen==="landing") return (<><LandingScreen onStart={()=>setScreen("login")}/></>);
+  if(screen==="login") return (<><LoginScreen onLogin={handleLogin} onGoRegister={()=>setScreen("register")}/></>);
+  if(screen==="register") return (<><RegisterScreen onRegister={handleRegister} onBack={()=>setScreen("login")}/></>);
 
   return (
-    <><style>{CSS}</style><div style={{minHeight:"100vh",background:C.sub2,fontFamily:F,display:"flex",justifyContent:"center",alignItems:"flex-start"}}>
+    <div style={{minHeight:"100vh",background:C.sub2,fontFamily:F,display:"flex",justifyContent:"center",alignItems:"flex-start"}}>
       <div style={{width:"100%",maxWidth:390,minHeight:"100vh",background:C.sub1,position:"relative",overflow:"hidden",boxShadow:"0 0 60px rgba(0,0,0,0.2)"}}>
 
         {/* Header */}
@@ -1356,33 +1469,25 @@ export default function THAWARApp() {
                 <ActionButton label="Awareness" iconWhite={ICON_AWARE_WHITE} iconColor={ICON_AWARE_GRAY}
                   color={C.awareness} colorDeep={C.awarenessDeep} sp={3} onAction={(e)=>doAction(e,"awareness")}/>
               </div>
-              <div style={{background:C.white,borderRadius:24,padding:"14px 8px",
-                boxShadow:"0 4px 0 #DFD4C8, 0 2px 12px rgba(0,0,0,0.06)",border:("2px solid "+C.sub2),marginBottom:16}}>
-                <div style={{textAlign:"center",fontFamily:F,fontSize:"0.62rem",color:C.gray,fontWeight:800,
-                  letterSpacing:"0.12em",marginBottom:4,textTransform:"uppercase"}}>📅 今日のあなたの記録</div>
-                <div style={{display:"flex"}}>
+              <div style={{background:C.white,borderRadius:22,padding:"18px",
+                boxShadow:"0 5px 0 #DFD4C8",border:("2px solid "+C.sub2),marginBottom:16}}>
+                <div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:C.text,marginBottom:14}}>[Calendar] 今日の記録</div>
+                <div style={{display:"flex",gap:10}}>
                   {[
-                    {label:"Thanks",  value:thanks,    color:C.thanks,    icon:ICON_THANKS_WHITE, iconColor:ICON_THANKS_PINK},
-                    {label:"Awareness",value:awareness, color:C.awareness, icon:ICON_AWARE_WHITE,  iconColor:ICON_AWARE_GRAY},
-                  ].map((s,i)=>(
-                    <div key={s.label} style={{flex:1,textAlign:"center",padding:"12px 8px"}}>
-                      {i===1&&<div style={{width:2,background:C.sub2,margin:"8px 0",position:"absolute"}}/>}
-                      <img src={s.value>0?s.icon:s.iconColor} alt={s.label}
-                        style={{width:32,height:32,objectFit:"contain",marginBottom:4,
-                          transform:s.value>0?"scale(1.1)":"scale(1)",
-                          transition:"transform 0.2s cubic-bezier(0.34,1.56,0.64,1)",
-                          filter:s.value>0?("drop-shadow(0 0 6px "+s.color+")"):"none"}}/>
-                      <div style={{fontFamily:F,fontWeight:900,fontSize:"1.5rem",color:s.color,
-                        display:"inline-block"}}>{s.value}</div>
-                      <div style={{fontFamily:F,fontSize:"0.65rem",color:C.gray,marginTop:2,fontWeight:700}}>{s.label}</div>
+                    {label:"Thanks",value:thanks,color:C.thanks,deep:C.thanksDeep,icon:ICON_THANKS_WHITE},
+                    {label:"Awareness",value:awareness,color:C.awareness,deep:C.awarenessDeep,icon:ICON_AWARE_WHITE},
+                  ].map(s=>(
+                    <div key={s.label} style={{flex:1,background:s.color,borderRadius:16,padding:"14px",textAlign:"center",boxShadow:("0 4px 0 "+s.deep)}}>
+                      <img src={s.icon} alt={s.label} style={{width:28,height:28,objectFit:"contain",marginBottom:6}}/>
+                      <div style={{fontFamily:F,fontSize:"1.8rem",fontWeight:900,color:"#fff"}}>{s.value}</div>
+                      <div style={{fontSize:"0.65rem",color:"rgba(255,255,255,0.9)",fontFamily:F,fontWeight:700}}>{s.label}</div>
                     </div>
                   ))}
                 </div>
               </div>
-
               <div style={{background:C.white,borderRadius:20,padding:"16px",
                 border:("2px dashed "+C.sub2),display:"flex",alignItems:"center",gap:12}}>
-                <div style={{fontSize:"2rem"}}>💡</div>
+                <div style={{fontSize:"2rem"}}>[Idea]</div>
                 <p style={{fontFamily:F,fontSize:"0.8rem",color:C.gray,lineHeight:1.7,fontWeight:500}}>
                   ボタンを押すだけでOK！<br/>
                   <span style={{color:C.thanks,fontWeight:800}}>Thanks</span> か <span style={{color:C.awareness,fontWeight:800}}>Awareness</span> で今日を記録しよう。
@@ -1393,16 +1498,14 @@ export default function THAWARApp() {
 
           {appTab==="thread"&&(
             <div style={{animation:"fadeIn 0.3s ease"}}>
-              <div style={{fontFamily:F,fontWeight:800,fontSize:"0.8rem",color:C.gray,marginBottom:14,letterSpacing:"0.06em"}}>💬 みんなの感謝と気づき</div>
+              <div style={{fontFamily:F,fontWeight:800,fontSize:"0.8rem",color:C.gray,marginBottom:14,letterSpacing:"0.06em"}}>[Chat] みんなの感謝と気づき</div>
               {threadPosts.map(post=>(
                 post.type==="change_report"
                   ? <ChangeReportCard key={post.id} post={post} users={DUMMY_USERS}
-                      onAction={(e,type)=>doAction(e,type)}
-                      highlight={highlightPostId===post.id}/>
+                      onAction={(e,type)=>doAction(e,type)}/>
                   : <PostCard key={post.id} post={post} users={DUMMY_USERS}
                       onAction={(e,type)=>doAction(e,type)}
-                      highlight={highlightPostId===post.id}
-                      onSympathy={(p)=>pushNotif(p.type==="thanks"?"post_thanks":"post_awareness","「"+p.text.slice(0,22)+"…」を読んで、"+(p.type==="thanks"?"感謝":"気づき")+"が生まれたユーザーがいます", p.id)}
+                      onSympathy={(p)=>pushNotif(p.type==="thanks"?"post_thanks":"post_awareness",("「"+p.text.slice(0,22)+"…」を読んで、"+p.type==="thanks"?"感謝":"気づき"+"が生まれたユーザーがいます"))}
                     />
               ))}
             </div>
@@ -1417,6 +1520,7 @@ export default function THAWARApp() {
                 onOpenChangeReport={()=>setShowChangeReport(true)}
                 hasChangeReportNotif={hasChangeReportNotif}
                 onLogout={handleLogout}
+                onUpdate={setCurrentUser}
               />
             </div>
           )}
@@ -1476,6 +1580,6 @@ export default function THAWARApp() {
       {toasts.map(t=><XPToast key={t.id} {...t} onDone={()=>removeToast(t.id)}/>)}
       {popup&&<InputPopup type={popup} onSave={handleSave} onClose={()=>setPopup(null)}/>}
       {showChangeReport&&<ChangeReportModal onSave={handleChangeReportSave} onClose={()=>setShowChangeReport(false)}/>}
-    </div></>
+    </div>
   );
 }
