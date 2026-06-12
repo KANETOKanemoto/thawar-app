@@ -1364,7 +1364,7 @@ export default function THAWARApp() {
     };
     setThreadPosts(ps=>[newPost,...ps]);
     setSP(s=>s+spAmt);
-    pushNotif("change_report","変化レポートを投稿しました [Leaf] ＋"+spAmt+"SP獲得！");
+    pushNotif("change_report","変化レポートを投稿しました 🌱 ＋"+spAmt+"SP獲得！");
     setShowChangeReport(false);
     setAppTab("thread");
   };
@@ -1427,9 +1427,9 @@ export default function THAWARApp() {
 
   // 3タブのみ
   const tabs=[
-    {key:"home",   label:"ホーム",   emoji:"[Home]"},
-    {key:"thread", label:"スレッド", emoji:"[Chat]"},
-    {key:"mypage", label:"自分",     emoji:"[Person]"},
+    {key:"home",   label:"ホーム",   emoji:"🏠"},
+    {key:"thread", label:"スレッド", emoji:"💬"},
+    {key:"mypage", label:"自分",     emoji:"👤"},
   ];
 
   if(screen==="landing") return (<><LandingScreen onStart={()=>setScreen("login")}/></>);
@@ -1471,7 +1471,7 @@ export default function THAWARApp() {
               </div>
               <div style={{background:C.white,borderRadius:22,padding:"18px",
                 boxShadow:"0 5px 0 #DFD4C8",border:("2px solid "+C.sub2),marginBottom:16}}>
-                <div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:C.text,marginBottom:14}}>[Calendar] 今日の記録</div>
+                <div style={{fontFamily:F,fontWeight:900,fontSize:"0.88rem",color:C.text,marginBottom:14}}>📅 今日のあなたの記録</div>
                 <div style={{display:"flex",gap:10}}>
                   {[
                     {label:"Thanks",value:thanks,color:C.thanks,deep:C.thanksDeep,icon:ICON_THANKS_WHITE},
@@ -1487,7 +1487,7 @@ export default function THAWARApp() {
               </div>
               <div style={{background:C.white,borderRadius:20,padding:"16px",
                 border:("2px dashed "+C.sub2),display:"flex",alignItems:"center",gap:12}}>
-                <div style={{fontSize:"2rem"}}>[Idea]</div>
+                <div style={{fontSize:"2rem"}}>💡</div>
                 <p style={{fontFamily:F,fontSize:"0.8rem",color:C.gray,lineHeight:1.7,fontWeight:500}}>
                   ボタンを押すだけでOK！<br/>
                   <span style={{color:C.thanks,fontWeight:800}}>Thanks</span> か <span style={{color:C.awareness,fontWeight:800}}>Awareness</span> で今日を記録しよう。
@@ -1498,7 +1498,7 @@ export default function THAWARApp() {
 
           {appTab==="thread"&&(
             <div style={{animation:"fadeIn 0.3s ease"}}>
-              <div style={{fontFamily:F,fontWeight:800,fontSize:"0.8rem",color:C.gray,marginBottom:14,letterSpacing:"0.06em"}}>[Chat] みんなの感謝と気づき</div>
+              <div style={{fontFamily:F,fontWeight:800,fontSize:"0.8rem",color:C.gray,marginBottom:14,letterSpacing:"0.06em"}}>💬 みんなの感謝と気づき</div>
               {threadPosts.map(post=>(
                 post.type==="change_report"
                   ? <ChangeReportCard key={post.id} post={post} users={DUMMY_USERS}
