@@ -1416,7 +1416,7 @@ function SettingsScreen({ user, onUpdate, onLogout, t }) {
         <label style={labelStyle}>{t.pass_change}</label>
         <div style={{position:'relative',marginBottom:10}}>
           <input value={password} onChange={e=>setPassword(e.target.value)}
-            type={showPass?'text':'password'} placeholder=t.new_pass
+            type={showPass?'text':'password'} placeholder={t.new_pass}
             style={{...inputStyle,marginBottom:0,paddingRight:44}}/>
           <button onClick={()=>setShowPass(!showPass)} style={{
             position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',
