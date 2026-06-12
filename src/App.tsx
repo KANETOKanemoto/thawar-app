@@ -317,7 +317,7 @@ function NotificationBell({ notifications, onOpen }) {
   );
 }
 
-function NotificationPanel({ notifications, onClose, onReadAll, onReadOne }) {
+function NotificationPanel({ notifications, onClose, onReadAll, onReadOne, t }) {
   return (
     <div style={{
       position:"fixed", inset:0, zIndex:10002,
@@ -1451,7 +1451,25 @@ function SettingsScreen({ user, onUpdate, onLogout, t }) {
 }
 
 
+const CSS=`
+    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0;}
+    @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+    @keyframes slideInRight{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
+    @keyframes slideInFromRight{from{transform:translateX(100%);}to{transform:translateX(0);}}
+    @keyframes popIn{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
+    ::-webkit-scrollbar{display:none;}
+    button{-webkit-tap-highlight-color:transparent;}
+  `;
+
 export default function THAWARApp() {
+  useEffect(() => {
+    const el = document.createElement('style');
+    el.textContent = CSS;
+    document.head.appendChild(el);
+    return () => { el.remove(); };
+  }, []);
   const [lang, setLang] = useState(detectLang);
   const t = TRANSLATIONS[lang];
   const [screen,setScreen]=useState("landing");
@@ -1555,18 +1573,7 @@ export default function THAWARApp() {
     setPopup(null);
   };
 
-  const CSS=`
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
-    *{box-sizing:border-box;margin:0;padding:0;}
-    @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-    @keyframes slideInRight{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}
-    @keyframes slideInFromRight{from{transform:translateX(100%);}to{transform:translateX(0);}}
-    @keyframes popIn{0%{transform:scale(0);}60%{transform:scale(1.2);}100%{transform:scale(1);}}
-    ::-webkit-scrollbar{display:none;}
-    button{-webkit-tap-highlight-color:transparent;}
-  `;
-
+  
   // 3タブのみ
   const tabs=[
     {key:"home",   label:t.tab_home,   emoji:"🏠"},
@@ -1718,6 +1725,7 @@ export default function THAWARApp() {
           onClose={()=>setShowNotif(false)}
           onReadAll={()=>{readAll();}}
           onReadOne={readOne}
+          t={t}
         />
       )}
       {confetti.map(c=><Confetti key={c.id} {...c} onDone={()=>removeConfetti(c.id)}/>)}
