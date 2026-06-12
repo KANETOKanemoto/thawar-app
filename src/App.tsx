@@ -1581,9 +1581,9 @@ export default function THAWARApp() {
     {key:"mypage", label:t.tab_me,     emoji:"👤"},
   ];
 
-  if(screen==="landing") return (<><LandingScreen onStart={()=>setScreen("login")}/></>);
-  if(screen==="login") return (<><LoginScreen onLogin={handleLogin} onGoRegister={()=>setScreen("register")}/></>);
-  if(screen==="register") return (<><RegisterScreen onRegister={handleRegister} onBack={()=>setScreen("login")}/></>);
+  if(screen==="landing") return (<><LandingScreen onStart={()=>setScreen("login")} lang={lang} setLang={setLang} t={t}/></>);
+  if(screen==="login") return (<><LoginScreen onLogin={handleLogin} onGoRegister={()=>setScreen("register")} lang={lang} setLang={setLang} t={t}/></>);
+  if(screen==="register") return (<><RegisterScreen onRegister={handleRegister} onBack={()=>setScreen("login")} lang={lang} setLang={setLang} t={t}/></>);
 
   return (
     <div style={{minHeight:"100vh",background:C.sub2,fontFamily:F,display:"flex",justifyContent:"center",alignItems:"flex-start"}}>
